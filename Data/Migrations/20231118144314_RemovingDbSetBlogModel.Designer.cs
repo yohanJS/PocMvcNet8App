@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PocMvcNet8App.Data;
 
@@ -11,9 +12,11 @@ using PocMvcNet8App.Data;
 namespace PocMvcNet8App.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231118144314_RemovingDbSetBlogModel")]
+    partial class RemovingDbSetBlogModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,19 +227,6 @@ namespace PocMvcNet8App.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PocMvcNet8App.Models.BlogModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BlogModel");
-                });
-
             modelBuilder.Entity("PocMvcNet8App.Models.BlogPostModel", b =>
                 {
                     b.Property<int>("Id")
@@ -247,9 +237,6 @@ namespace PocMvcNet8App.Data.Migrations
 
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("BlogModelId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -270,8 +257,6 @@ namespace PocMvcNet8App.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BlogModelId");
 
                     b.HasIndex("UserId");
 
@@ -331,10 +316,6 @@ namespace PocMvcNet8App.Data.Migrations
 
             modelBuilder.Entity("PocMvcNet8App.Models.BlogPostModel", b =>
                 {
-                    b.HasOne("PocMvcNet8App.Models.BlogModel", null)
-                        .WithMany("Posts")
-                        .HasForeignKey("BlogModelId");
-
                     b.HasOne("PocMvcNet8App.Data.ApplicationUser", "User")
                         .WithMany("blogPostModel")
                         .HasForeignKey("UserId");
@@ -345,11 +326,6 @@ namespace PocMvcNet8App.Data.Migrations
             modelBuilder.Entity("PocMvcNet8App.Data.ApplicationUser", b =>
                 {
                     b.Navigation("blogPostModel");
-                });
-
-            modelBuilder.Entity("PocMvcNet8App.Models.BlogModel", b =>
-                {
-                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

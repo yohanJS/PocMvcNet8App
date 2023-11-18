@@ -7,7 +7,6 @@ namespace PocMvcNet8App.Data
 {
     public class ApplicationUser : IdentityUser
     {
-        public ICollection<BlogModel>? blogModel { get; set; }
         public ICollection<BlogPostModel>? blogPostModel { get; set; }
     }
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -16,8 +15,8 @@ namespace PocMvcNet8App.Data
             : base(options)
         {
         }
-        public DbSet<BlogModel>? blogModel { get; set; }
         public DbSet<BlogPostModel>? blogPostModel { get; set; }
+        public DbSet<PocMvcNet8App.Models.BlogModel> BlogModel { get; set; } = default!;
     }
 }
 
