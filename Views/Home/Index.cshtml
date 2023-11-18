@@ -1,8 +1,17 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using PocMvcNet8App.Data
+@inject SignInManager<ApplicationUser> SignInManager
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <h2>I am logged in.</h2>
+}
+else
+{
+    <h2>I am not logged in. Login now.</h2>
+}

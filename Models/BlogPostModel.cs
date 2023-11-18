@@ -5,8 +5,7 @@ using PocMvcNet8App.Data;
 namespace PocMvcNet8App.Models
 {
     public class BlogPostModel
-    {
-        
+    {        
         public int Id { get; set; }
         public string? UserId { get; set; }
         [NotMapped]

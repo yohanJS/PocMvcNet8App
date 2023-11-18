@@ -16,7 +16,7 @@ namespace PocMvcNet8App.Data
         {
         }
         public DbSet<BlogPostModel>? blogPostModel { get; set; }
-        public DbSet<PocMvcNet8App.Models.BlogModel> BlogModel { get; set; } = default!;
+        public DbSet<BlogModel> BlogModel { get; set; } = default!;
     }
 }
 

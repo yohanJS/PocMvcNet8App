@@ -32,7 +32,7 @@ namespace PocMvcNet8App.Controllers
 
             if (currentUser != null && _context.blogPostModel != null)
             {
-                // Filter UserPrimaryInfo records by the current user's ID
+                // Filter blogPostModel records by the current user's ID
                 var blogPostModelList = await _context.blogPostModel
                     .Include(u => u.User)
                     .Where(u => u.UserId == currentUser.Id)
