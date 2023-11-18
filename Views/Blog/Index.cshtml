@@ -6,20 +6,37 @@
 }
 
 <div class="row">
+    @*Featured Blog*@
+    <div class="p-4 p-md-5 mb-4 text-white bg-dark">
+        <div class="col-md-6 px-0">
+            <h1 class="display-4 fst-italic">Title of a longer featured blog post</h1>
+            <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+        </div>
+    </div>
+
     @foreach (var item in Model)
     {
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                @if (item.ImageData != null && item.ImageType != null)
-                {
-                    <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="card-img-top" alt="Image">
-                }
-                <div class="card-body">
-                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                    <p class="card-text">@Html.DisplayFor(modelItem => item.Content)</p>
-                    <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</small></p>
-                    <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => item.Author)</small></p>
-                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Details</a>
+        <div class="col-md-6 p-0">
+            <div class="row m-2 g-0 border rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative bg-light">
+                <div class="col p-4 d-flex flex-column position-static">
+                    <h3 class="mb-0">@Html.DisplayFor(modelItem => item.Title)</h3>
+                    <div class="mb-1 text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</div>
+                    @if (item.Content != null && item.Content.Length > 100)
+                    {
+                        <p class="card-text mb-auto">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
+                    }
+                    else
+                    {
+                        <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
+                    }
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Continue reading</a>
+                </div>
+                <div class="col-auto d-none d-lg-block">
+                    @if (item.ImageData != null && item.ImageType != null)
+                    {
+                        <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="card-img-top" width="200" height="250" alt="Image">
+                    }
                 </div>
             </div>
         </div>

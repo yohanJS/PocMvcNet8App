@@ -5,54 +5,55 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="container mt-5">
+    @if (Model.Any())
+    {
+        <div class="row p-0">
+            <div class="col-12 p-0">
+                <a href="@Url.Action("Create")" class="btn btn-primary mb-3">Create Blog</a>
+            </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <hr class="mt-5" />
+                <div class="p-4 p-md-5 mb-4 text-white bg-dark">
+                    <div class="col-md-6 px-0">
+                        @if (item.ImageData != null && item.ImageType != null)
+                        {
+                            <img class="card-img-top w-25" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" alt="Card image cap">
+                        }
+                        <h1 class="display-4 fst-italic">@Html.DisplayFor(modelItem => item.Title)</h1>
+                        <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</small></p>
+                        <p class="card-text">Author: @Html.DisplayFor(modelItem => item.Author)</p>
+                        <a href="@Url.Action("Edit", new { id = item.Id })" class="text-decoration-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                            </svg>
+                        </a>
+                        <a href="@Url.Action("Delete", new { id = item.Id })" class="text-decoration-none p-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col">
+                <h2>The are no Blogs to show.</h2>
+                <a href="@Url.Action("Create")" class="btn btn-primary mb-3">Create Blog</a>
+            </div>
+        </div>
+    }
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Content)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                @if (item.ImageData != null && item.ImageType != null)
-                {
-                    <img class="card-img-top w-25" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" />
-                }
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+
