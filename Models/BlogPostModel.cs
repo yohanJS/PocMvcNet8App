@@ -16,7 +16,7 @@ namespace PocMvcNet8App.Models
         public string? ImageType { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Today;
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string? Author { get; set; }
         // Additional properties such as categories, tags, etc. can be added
 
