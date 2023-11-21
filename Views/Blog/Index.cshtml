@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PocMvcNet8App.Models.BlogPostModel>
+﻿@model PocMvcNet8App.Models.BlogModel
 @inject PocMvcNet8App.Services.IImageService _imageService
 
 @{
@@ -14,32 +14,35 @@
             <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
         </div>
     </div>
-
-    @foreach (var item in Model)
+    @if (Model.Posts != null)
     {
-        <div class="col-md-6 p-0">
-            <div class="row m-2 g-0 border rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative bg-light">
-                <div class="col p-4 d-flex flex-column position-static">
-                    <h3 class="mb-0">@Html.DisplayFor(modelItem => item.Title)</h3>
-                    <div class="mb-1 text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</div>
-                    <p class="card-text">Author: @Html.DisplayFor(modelItem => item.Author)</p>
-                    @if (item.Content != null && item.Content.Length > 100)
-                    {
-                        <p class="card-text mb-auto">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
-                    }
-                    else
-                    {
-                        <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
-                    }
-                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Continue reading</a>
-                </div>
-                <div class="col-auto d-none d-lg-block">
-                    @if (item.ImageData != null && item.ImageType != null)
-                    {
-                        <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="card-img-top" width="200" height="250" alt="Image">
-                    }
+        @foreach (var item in Model.Posts)
+        {
+            <div class="col-md-6 p-0">
+                <div class="row m-2 g-0 border rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative bg-light">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <h3 class="mb-0">@Html.DisplayFor(modelItem => item.Title)</h3>
+                        <div class="mb-1 text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</div>
+                        @* <p class="card-text">Author: @Html.DisplayFor(modelItem => item.Author)</p> *@
+                        <p>@item.Author</p>
+                        @if (item.Content != null && item.Content.Length > 100)
+                        {
+                            <p class="card-text mb-auto">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
+                        }
+                        else
+                        {
+                            <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
+                        }
+                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Continue reading</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        @if (item.ImageData != null && item.ImageType != null)
+                        {
+                            <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="card-img-top" width="200" height="250" alt="Image">
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
 </div>

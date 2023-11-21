@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,25 +14,30 @@ namespace PocMvcNet8App.Controllers
     public class BlogController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public BlogController(ApplicationDbContext context)
+        public BlogController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager; // Initialize UserManager
         }
 
         // GET: Blog
         public async Task<IActionResult> Index()
         {
+            BlogModel model = new BlogModel();
+            var currentUser = await _userManager.GetUserAsync(User);
 
             if (_context.blogPostModel != null)
             {
-                //returns all BlogPost from all users
-                return View(await _context.blogPostModel.ToListAsync());
+                model.Posts = _context.blogPostModel.ToList();
             }
-            else
+            if (_context.UserPrimaryInfo != null)
             {
-                return RedirectToAction("Index");
+                model.users = _context.UserPrimaryInfo.ToList();
             }
+
+            return View(model);
 
         }
 
@@ -66,7 +72,7 @@ namespace PocMvcNet8App.Controllers
         //To protect from overposting attacks, enable the specific properties you want to bind to.
         //For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 
-       [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id")] BlogModel blogModel)
         {
