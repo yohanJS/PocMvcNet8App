@@ -91,6 +91,14 @@ namespace PocMvcNet8App.Controllers
                     // Set the UserId property to the current user's ID
                     blogPostModel.UserId = currentUser.Id;
 
+                    if (_context.UserPrimaryInfo != null)
+                    {
+                        // Ensure that the user is editing their own record
+                        var userPrimaryInfo = await _context.UserPrimaryInfo
+                            .FirstOrDefaultAsync(u => u.UserId == currentUser.Id);
+                        blogPostModel.Author = userPrimaryInfo.FirstName;
+                    }
+
                     if (blogPostModel.ImageFile != null)
                     {
                         blogPostModel.ImageData = await _imageService.ConvertFileToByteArrayAsync(blogPostModel.ImageFile);
