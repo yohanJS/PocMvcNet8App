@@ -29,7 +29,7 @@ else
                     <div class="card mx-auto">
                         @if (item.ImageData != null && item.ImageType != null)
                         {
-                            <img class="card-img-top" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" />
+                            <img class="card-img-top w-25" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" />
                         }
                         else
                         {

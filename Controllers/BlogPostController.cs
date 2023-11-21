@@ -137,7 +137,7 @@ namespace PocMvcNet8App.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ImageData,ImageType,Title,Content,CreatedDate,Author")] BlogPostModel blogPostModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ImageData,ImageType,ImageFile,Title,Content,CreatedDate,Author")] BlogPostModel blogPostModel)
         {
             if (id != blogPostModel.Id)
             {
@@ -148,8 +148,31 @@ namespace PocMvcNet8App.Controllers
             {
                 try
                 {
-                    _context.Update(blogPostModel);
-                    await _context.SaveChangesAsync();
+                    var currentUser = await _userManager.GetUserAsync(User);
+                    if (currentUser != null)
+                    {
+                        // Ensure that the user is editing their own record
+                        var blogPostModelToUpdate = await _context.blogPostModel
+                            .FirstOrDefaultAsync(u => u.UserId == currentUser.Id && u.Id == id);
+
+                        if (blogPostModelToUpdate != null)
+                        {
+                            // Update the fields that you want to allow editing
+                            blogPostModelToUpdate.Title = blogPostModel.Title;
+                            if (blogPostModel.ImageData != null)
+                            {
+                                blogPostModelToUpdate.ImageFile = blogPostModel.ImageFile;
+                                blogPostModelToUpdate.ImageData = await _imageService.ConvertFileToByteArrayAsync(blogPostModel.ImageFile);
+                                blogPostModelToUpdate.ImageType = blogPostModel.ImageFile.ContentType;
+                            }
+                            blogPostModelToUpdate.Content = blogPostModel.Content;
+                            blogPostModelToUpdate.Author = blogPostModel.Author;
+
+                            _context.Update(blogPostModelToUpdate);
+                            await _context.SaveChangesAsync();
+                            return RedirectToAction(nameof(Index));
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
