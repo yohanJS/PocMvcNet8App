@@ -1,5 +1,8 @@
-﻿@model PocMvcNet8App.Models.BlogModel
+﻿@using Microsoft.AspNetCore.Identity
+@using PocMvcNet8App.Data
+@model PocMvcNet8App.Models.BlogModel
 @inject PocMvcNet8App.Services.IImageService _imageService
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Index";
@@ -16,33 +19,51 @@
     </div>
     @if (Model.Posts != null)
     {
-        @foreach (var item in Model.Posts)
-        {
-            <div class="col-md-6 p-0">
-                <div class="row m-2 g-0 border rounded overflow-hidden flex-md-row mb-4 h-md-250 position-relative bg-light">
-                    <div class="col p-4 d-flex flex-column position-static">
-                        <h3 class="mb-0">@Html.DisplayFor(modelItem => item.Title)</h3>
-                        <div class="mb-1 text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</div>
-                        @* <p class="card-text">Author: @Html.DisplayFor(modelItem => item.Author)</p> *@
-                        <p>@item.Author</p>
-                        @if (item.Content != null && item.Content.Length > 100)
-                        {
-                            <p class="card-text mb-auto">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
-                        }
-                        else
-                        {
-                            <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
-                        }
-                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Continue reading</a>
+        <div class="container-fluid">
+            <div class="row">
+                @foreach (var item in Model.Posts)
+                {
+                    <div class="col-md-6 mb-4">
+                        <div class="custom-card rounded-3 shadow-lg">
+                            <div class="row g-0 pt-3 pb-3">
+                                <div class="col-md-6 text-center align-self-center">
+                                    @if (item.ImageData != null && item.ImageType != null)
+                                    {
+                                        <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="img-card w-75 rounded-3" alt="Card Image">
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card-body text-center">
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
+                                        @* @if (item.Content != null && item.Content.Length > 50)
+                                        {
+                                            <p class="card-text">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
+                                        }
+                                        else
+                                        {
+                                            <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
+                                        } *@
+                                        <p class="card-text m-0"><small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</small></p>
+                                        <p class="card-text"><small>@item.Author</small></p>
+                                        <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Read</a>
+                                        @if (SignInManager.IsSignedIn(User))
+                                        {
+                                            @foreach (var user in Model.users)
+                                            {
+                                                if (user.UserId == item.UserId)
+                                                {
+                                                    <a asp-controller="BlogPost" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-auto d-none d-lg-block">
-                        @if (item.ImageData != null && item.ImageType != null)
-                        {
-                            <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="card-img-top" width="200" height="250" alt="Image">
-                        }
-                    </div>
-                </div>
+                }
             </div>
-        }
+        </div>
+
     }
 </div>
