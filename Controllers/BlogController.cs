@@ -32,9 +32,16 @@ namespace PocMvcNet8App.Controllers
             {
                 model.Posts = _context.blogPostModel.ToList();
             }
-            if (_context.UserPrimaryInfo != null)
+
+            if (currentUser != null && _context.UserPrimaryInfo != null)
             {
-                model.users = _context.UserPrimaryInfo.ToList();
+                // Filter UserPrimaryInfo records by the current user's ID
+                var user = await _context.UserPrimaryInfo
+                    .Include(u => u.User)
+                    .Where(u => u.UserId == currentUser.Id)
+                    .ToListAsync();
+
+                model.users = user.ToList();
             }
 
             return View(model);

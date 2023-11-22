@@ -20,17 +20,13 @@ html {
 body {
   margin-bottom: 60px;
 }
-.round-small-image {
-    border-radius: 50%;
-    width: 50px; /* Set the initial width */
-    height: 50px; /* Set the initial height */
-    object-fit: cover; /* Maintain aspect ratio */
+.custom-card {
+    overflow: hidden;
+    height: 100%; /* Set a fixed height for the card */
 }
 
-/* Media query for responsiveness */
-@media (min-width: 768px) {
-    .round-small-image {
-        width: 100px; /* Adjust width for larger screens */
-        height: 100px; /* Adjust height for larger screens */
-    }
-}
+/*    .custom-card img {
+        object-fit: cover;
+        width: 75%;
+        height: 75%;
+    }*/
