@@ -1,48 +1,48 @@
 ﻿@model PocMvcNet8App.Models.BlogPostModel
 @using PocMvcNet8App.Data
 @inject PocMvcNet8App.Services.IImageService _imageService
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Details";
 }
 
 
-@* @foreach (var item in Model)
-{
-
-
-
-} *@
-<div class="container-fluid col-xxl-8 px-4 py-5">
-    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-        <div class="col-10 col-sm-8 col-lg-6">
-            @if (Model.ImageData != null && Model.ImageType != null)
-            {
-                <img src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)" class="d-block mx-lg-auto img-fluid" width="700" height="500" alt="Image">
-            }
+<div class="container">
+    <div class="row shadow-sm rounded-2">
+        <div class="col-12 bg-dark">
+            <div class="row">
+                <div class="col-md-6 align-self-start">
+                    @if (Model.ImageData != null && Model.ImageType != null)
+                    {
+                        <img src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)" class="img-fluid w-25 m-2 rounded-2" alt="Image">
+                    }
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <h1 class="text-white">@Model.Title</h1>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-6">
-            <h1 class="display-5 fw-bold lh-1 mb-3">@Model.Title</h1>
+        <div class="col-12 m-0 p-5">          
             <p class="lead">@Model.Content</p>
-            <p>@Model.Id</p>
-            <p>@Model.CreatedDate</p>
-            <p>By @Model.Author</p>
-            @* <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
-            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>
-            </div> *@
-        </div>
-        <div class="text-end">
-            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <p class="text-muted small">@Model.CreatedDate</p>
+            <p>By: @Model.Author</p>
+            <div class="row">
+                <div class="col p-2 text-end">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
         </div>
     </div>
-    <hr />
-    <div class="row">
-        <div class="col-12 border border-2 rounded-3 p-2">
+
+    @*Form for adding comments*@
+    <div class="row mt-4">
+        <div class="col-12 border border-2 rounded-2 mt-3 p-2">
             <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
                 <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
 
-                <div class="mb-3">
+                <div class="mb-3 col-5">
                     <label for="TitleComment" class="form-label">Title</label>
                     <input type="text" asp-for="TitleComment" class="form-control" />
                     <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
@@ -58,17 +58,19 @@
             </form>
         </div>
     </div>
+
+    @*Comment Section*@
     @if (Model.Comments != null)
     {
         @foreach (var comment in Model.Comments)
         {
-            <div class="row mt-3">
-                <div class="col-12 comment-section">
-                    <div class="comment bg-light p-3 mb-3">
-                        <p class="comment-title mb-1">@comment.TitleComment</p>
+            <div class="row mt-3 bg-light">
+                <div class="col-12 p-0">
+                    <div class="p-3 mb-3">
+                        <p class="mb-1">@comment.TitleComment</p>
                         <p class="mb-1">@comment.Comment</p>
-                        <p class="comment-date text-muted small mb-1">@comment.Created</p>
-                        <p class="mb-0">@comment.Author</p>
+                        <p class="mb-1 small text-muted">@comment.Created</p>
+                        <p class="mb-0 fw-bold">Author: @comment.Author</p>
                     </div>
                 </div>
             </div>
