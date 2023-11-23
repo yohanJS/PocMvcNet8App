@@ -9,11 +9,11 @@
 {
     <div class="row mt-4 justify-content-center">
         <div class="col-12 align-self-center p-0">
-            <div class="card mx-auto">
+            <div class="card mx-auto profile-card">
                 <div class="card-body p-5">
                     <h5 class="card-title">Ready to get started?</h5>
                     <p class="card-text">Enter your information to create a new profile.</p>
-                    <a asp-action="Create" class="btn btn-lg btn-primary w-100">Create</a>
+                    <a asp-action="Create" class="btn btn-lg btn-primary btn-action">Create</a>
                 </div>
             </div>
         </div>
@@ -25,30 +25,39 @@ else
         <div class="row mt-4 justify-content-center">
             @foreach (var item in Model)
             {
-                <div class="col-12 align-self-center p-0">
-                    <div class="card mx-auto">
+                <div class="col-md-6 align-self-center p-2">
+                    <div class="card profile-card mx-auto">
                         @if (item.ImageData != null && item.ImageType != null)
                         {
-                            <img class="card-img-top w-25" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" />
+                            <img class="card-img-top profile-image" src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" />
                         }
                         else
                         {
-                            <p>Missing Profile Image</p>
+                            <div class="missing-image">Missing Profile Image</div>
                         }
-                        <div class="card-body p-5">
-                            <h5 class="card-title">@Html.DisplayFor(modelItem => item.JobTitle)</h5>
-                            <p class="card-text">
+                        <div class="card-body profile-details">
+                            <div class="profile-title">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)</div>
+                            <div class="profile-subtitle">@Html.DisplayFor(modelItem => item.JobTitle)</div>
+                            <div class="profile-info">
                                 <strong class="text-primary">Age:</strong> <span class="text-secondary">@Html.DisplayFor(modelItem => item.Age)</span><br>
-                                <strong class="text-primary">Name:</strong> <span class="text-secondary">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastName)</span><br>
                                 <strong class="text-primary">Address:</strong> <span class="text-secondary">@Html.DisplayFor(modelItem => item.Address)</span><br>
-                                <strong class="text-primary">Zip Code:</strong> <span class="text-secondary">@Html.DisplayFor(modelItem => item.ZipCode)</span>
-                            </p>
+                                <strong class="text-primary">Zip Code:</strong> <span class="text-secondary">@Html.DisplayFor(modelItem => item.ZipCode)</span><br>
+                            </div>
+                            <div class="col-12">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-decoration-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+                                    </svg>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-decoration-none p-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" class="bi bi-trash" viewBox="0 0 16 16">
+                                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+                                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6 align-self-center p-0">
-                    <a class="btn btn-lg btn-info w-100 mt-1" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a class="btn btn-lg btn-danger w-100 mt-1" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </div>
             }
         </div>
