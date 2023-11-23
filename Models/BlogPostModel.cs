@@ -18,6 +18,12 @@ namespace PocMvcNet8App.Models
         public string? Content { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public string? Author { get; set; }
+        [NotMapped]
+        public string? TitleComment { get; set; }
+        [NotMapped]
+        public string? Comment { get; set; }
+        [NotMapped]
+        public List<CommentModel>? Comments { get; set; }
 
         [ForeignKey("UserId")]
         public virtual ApplicationUser? User { get; set; }

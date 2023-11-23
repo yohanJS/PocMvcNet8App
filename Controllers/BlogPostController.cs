@@ -122,7 +122,37 @@ namespace PocMvcNet8App.Controllers
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", blogPostModel.UserId);
             return View(blogPostModel);
-        }      
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddComment(int blogPostId, [Bind("Id,TitleComment,Comment")] BlogPostModel blogPostModel)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            CommentModel commentModel = new CommentModel();
+
+            if (currentUser != null)
+            {
+                if (blogPostModel.TitleComment != null && blogPostModel.Comment != null)
+                {
+                    commentModel.UserId = currentUser.Id;
+                    commentModel.BlogPostId = blogPostModel.Id;
+                    commentModel.TitleComment = blogPostModel.TitleComment;
+                    commentModel.Comment = blogPostModel.Comment;
+                    commentModel.Author = currentUser.Email;
+                }
+
+                //add the new comment to the Comment Table
+                _context.CommentModel.Add(commentModel);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Details", "Blog", new { id = blogPostId });
+            }
+            else
+            {
+                return NotFound("Current user not found.");
+            }
+        }
 
         // GET: BlogPost/Edit/5
         public async Task<IActionResult> Edit(int? id)

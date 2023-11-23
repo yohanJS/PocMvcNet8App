@@ -11,6 +11,7 @@ namespace PocMvcNet8App.Models
         public int BlogPostId { get; set; }
         public string? TitleComment { get; set; }
         public string? Comment { get; set; }
+        public string? Author { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
 
     }

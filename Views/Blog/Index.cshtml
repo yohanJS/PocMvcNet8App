@@ -35,7 +35,7 @@
                                 <div class="col-md-6">
                                     <div class="card-body text-center">
                                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                                        @if (item.Content != null && item.Content.Length > 50)
+                                        @if (item.Content != null && item.Content.Length > 100)
                                         {
                                             <p class="card-text">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
                                         }

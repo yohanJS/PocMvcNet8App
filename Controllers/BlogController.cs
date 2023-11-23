@@ -51,7 +51,9 @@ namespace PocMvcNet8App.Controllers
         // GET: Blog/Details/ofId
         public IActionResult Details(int? id)
         {
-            BlogModel blogModel = new BlogModel();
+            BlogModel? blogModel = new BlogModel();
+            CommentModel? commentModel = new CommentModel();
+            BlogPostModel? blogPostModel = new BlogPostModel();
 
             if (id == null)
             {
@@ -66,36 +68,17 @@ namespace PocMvcNet8App.Controllers
                     .ToList();
             }
 
-            return View(blogModel);
-        }
-
-
-        [HttpPost]
-        public async Task<ActionResult> AddComment(int? id, [Bind("TitleComment,Comment")] CommentModel commentModel)
-        {
-            // Assuming you have a property for the currently signed-in user
-            var currentUser = await _userManager.GetUserAsync(User);
-            BlogPostModel? blogPostModel = new BlogPostModel();
-
-            if (currentUser != null)
+            if (blogModel.Posts != null) 
             {
-                commentModel.UserId = currentUser.Id;
-                //commentModel.BlogPostId = blogPostModel.Id;
-                commentModel.TitleComment = commentModel.TitleComment;
-                commentModel.Comment = commentModel.Comment;
-
-                // Add the comment to the database
-                _context.CommentModel.Add(commentModel);
-                await _context.SaveChangesAsync();
-
-                // Redirect back to the blog post details page
-                return RedirectToAction("Index");
+                blogPostModel = blogModel.Posts.FirstOrDefault();
             }
-            else
+            if (_context.CommentModel != null)
             {
-                // Handle the case where the current user is not found
-                return NotFound("Current user not found.");
+                blogPostModel.Comments = _context.CommentModel
+                    .Where(comment => comment.BlogPostId == id).ToList();
             }
+
+            return View(blogPostModel);
         }
         private bool BlogModelExists(int id)
         {
