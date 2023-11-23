@@ -1,45 +1,64 @@
 ﻿@model PocMvcNet8App.Models.BlogPostModel
+@using PocMvcNet8App.Data
 @inject PocMvcNet8App.Services.IImageService _imageService
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<div class="container">
 
-    <div class="mb-4">
-        @if (Model.ImageData != null && Model.ImageType != null)
-        {
-            <img src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)" class="card-img-top" alt="Image">
-        }
+<div class="container-fluid col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+            @if (Model.ImageData != null && Model.ImageType != null)
+            {
+                <img src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)" class="d-block mx-lg-auto img-fluid" width="700" height="500" alt="Image">
+            }
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">@Html.DisplayFor(model => model.Title)</h1>
+            <p class="lead">@Html.DisplayFor(model => model.Content)</p>
+            <p>@Model.Id</p>
+            <p>@Html.DisplayFor(model => model.CreatedDate)</p>
+            <p>By @Html.DisplayFor(model => model.Author)</p>
+            @* <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>
+            </div> *@
+        </div>
+        <div class="text-end">
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
     </div>
-
-    <div>
-        <h4>@Html.DisplayFor(model => model.Title)</h4>
-        <hr />
-        <dl class="row">
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Content)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Content)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.CreatedDate)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Author)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Author)
-            </dd>
-        </dl>
-    </div>
-
-    <div>
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    <hr />
+    <div class="row">
+        <div class="col-12">
+            <h3>Add comment</h3>
+            <form asp-controller="BlogPost" asp-action="AddComment" method="post">
+                <div class="form-group">
+                    <label asp-for="TitleComment" class="control-label"></label>
+                    <input asp-for="TitleComment" class="form-control" />
+                    <span asp-validation-for="TitleComment" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CommentContent" class="control-label"></label>
+                    <input asp-for="CommentContent" class="form-control" />
+                    <span asp-validation-for="CommentContent" class="text-danger"></span>
+                </div>
+                <button type="submit" value="Create">Add Comment</button>
+            </form>
+        </div>
+        <div class="col-12">
+            <h3>Comments</h3>
+            @* @if (Model.Comments != null)
+            {
+            @foreach (var comment in Model.Comments)
+            {
+            <p>@comment.Comment</p>
+            }
+            } *@
+        </div>
     </div>
 </div>
+
+

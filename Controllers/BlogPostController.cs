@@ -45,6 +45,7 @@ namespace PocMvcNet8App.Controllers
                 // Handle the case where the current user is not found
                 return NotFound("Current user not found.");
             }
+
         }
 
         // GET: BlogPost/Details/5
@@ -121,6 +122,34 @@ namespace PocMvcNet8App.Controllers
             }
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", blogPostModel.UserId);
             return View(blogPostModel);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddComment([Bind("Id,TitleComment,CommentContent")] BlogPostModel blogPostModel)
+        {
+            // Assuming you have a property for the currently signed-in user
+            var currentUser = await _userManager.GetUserAsync(User);
+            CommentModel commentModel = new CommentModel();
+
+            if (currentUser != null)
+            {
+                commentModel.UserId = currentUser.Id;
+                commentModel.BlogPostId = blogPostModel.Id;
+                commentModel.Title = blogPostModel.TitleComment;
+                commentModel.Content = blogPostModel.CommentContent;
+
+                // Add the comment to the database
+                _context.CommentModel.Add(commentModel);
+                await _context.SaveChangesAsync();
+
+                // Redirect back to the blog post details page
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Handle the case where the current user is not found
+                return NotFound("Current user not found.");
+            }
         }
 
         // GET: BlogPost/Edit/5
