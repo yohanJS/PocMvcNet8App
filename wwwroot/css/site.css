@@ -24,3 +24,69 @@ body {
     overflow: hidden;
     height: 100%; /* Set a fixed height for the card */
 }
+
+/*Profile CSS*/
+.profile-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    background-color: #fff;
+}
+
+    .profile-card:hover {
+        transform: scale(1.03);
+    }
+
+.profile-image {
+    padding: 10px;
+    object-fit: cover;
+    height: 200px;
+    width: 45%;
+    border-bottom: 1px solid #ddd;
+    border-radius: 500px;
+    background-size: contain;
+}
+
+.profile-details {
+    padding: 20px;
+}
+
+.btn-action {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.missing-image {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    color: #777;
+    font-size: 14px;
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.profile-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.profile-subtitle {
+    font-size: 18px;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+.profile-info {
+    margin-bottom: 20px;
+}
+
+    .profile-info strong {
+        color: #333;
+    }
+      
