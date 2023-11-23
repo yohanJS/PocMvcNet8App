@@ -1,4 +1,4 @@
-﻿@model PocMvcNet8App.Models.BlogModel
+﻿@model PocMvcNet8App.Models.BlogPostModel
 @using PocMvcNet8App.Data
 @inject PocMvcNet8App.Services.IImageService _imageService
 
@@ -7,54 +7,71 @@
 }
 
 
-@foreach (var item in Model.Posts)
+@* @foreach (var item in Model)
 {
-    <div class="container-fluid col-xxl-8 px-4 py-5">
-        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
-            <div class="col-10 col-sm-8 col-lg-6">
-                @if (item.ImageData != null && item.ImageType != null)
-                {
-                    <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="d-block mx-lg-auto img-fluid" width="700" height="500" alt="Image">
-                }
-            </div>
-            <div class="col-lg-6">
-                <h1 class="display-5 fw-bold lh-1 mb-3">@item.Title</h1>
-                <p class="lead">@item.Content</p>
-                <p>@Model.Id</p>
-                <p>@item.CreatedDate</p>
-                <p>By @item.Author</p>
-                @* <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+
+
+
+} *@
+<div class="container-fluid col-xxl-8 px-4 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+        <div class="col-10 col-sm-8 col-lg-6">
+            @if (Model.ImageData != null && Model.ImageType != null)
+            {
+                <img src="@_imageService.ConvertByteArrayToFile(Model.ImageData, Model.ImageType)" class="d-block mx-lg-auto img-fluid" width="700" height="500" alt="Image">
+            }
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">@Model.Title</h1>
+            <p class="lead">@Model.Content</p>
+            <p>@Model.Id</p>
+            <p>@Model.CreatedDate</p>
+            <p>By @Model.Author</p>
+            @* <div class="d-grid gap-2 d-md-flex justify-content-md-start">
             <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Primary</button>
             <button type="button" class="btn btn-outline-secondary btn-lg px-4">Default</button>
             </div> *@
-            </div>
-            <div class="text-end">
-                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-            </div>
         </div>
-        <hr />
-        <div class="row">
-            <div class="col-12">
-                <h3>Add comment</h3>
-                <form asp-controller="Blog" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
-                    <input type="hidden" asp-for="@item.Id" value="@item.Id" /> 
-
-                    @* <div class="form-group">
-                        <label asp-for="TitleComment" class="control-label"></label>
-                        <input asp-for="NewComment.TitleComment" class="form-control" />
-                        <span asp-validation-for="NewComment.TitleComment" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="NewComment.Comment" class="control-label"></label>
-                        <input asp-for="NewComment.Comment" class="form-control" />
-                        <span asp-validation-for="NewComment.Comment" class="text-danger"></span>
-                    </div> *@
-                    <button type="submit" value="Create">Add Comment</button>
-                </form>
-            </div>
+        <div class="text-end">
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
+    <hr />
+    <div class="row">
+        <div class="col-12 border border-2 rounded-3 p-2">
+            <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
+                <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
 
+                <div class="mb-3">
+                    <label for="TitleComment" class="form-label">Title</label>
+                    <input type="text" asp-for="TitleComment" class="form-control" />
+                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
+                </div>
 
-}
+                <div class="mb-3">
+                    <label for="Comment" class="form-label">Comment</label>
+                    <input type="text" asp-for="Comment" class="form-control" />
+                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Comment)</div>
+                </div>
 
+                <button type="submit" class="btn btn-success">Add Comment</button>
+            </form>
+        </div>
+    </div>
+    @if (Model.Comments != null)
+    {
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="row mt-3">
+                <div class="col-12 comment-section">
+                    <div class="comment bg-light p-3 mb-3">
+                        <p class="comment-title mb-1">@comment.TitleComment</p>
+                        <p class="mb-1">@comment.Comment</p>
+                        <p class="comment-date text-muted small mb-1">@comment.Created</p>
+                        <p class="mb-0">@comment.Author</p>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
