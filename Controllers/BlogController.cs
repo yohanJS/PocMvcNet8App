@@ -60,7 +60,7 @@ namespace PocMvcNet8App.Controllers
             if (_context.blogPostModel != null)
             {
                 blogPostModel = await _context.blogPostModel
-    .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
                 if (blogPostModel == null)
                 {
                     return NotFound();

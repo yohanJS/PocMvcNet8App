@@ -35,16 +35,16 @@
                                 <div class="col-md-6">
                                     <div class="card-body text-center">
                                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                                        @* @if (item.Content != null && item.Content.Length > 50)
+                                        @if (item.Content != null && item.Content.Length > 50)
                                         {
                                             <p class="card-text">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
                                         }
                                         else
                                         {
                                             <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
-                                        } *@
-                                        <p class="card-text m-0"><small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate)</small></p>
+                                        }
                                         <p class="card-text"><small>@item.Author</small></p>
+                                        <p class="card-text m-0"><small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate.Year)</small></p>
                                         <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Read</a>
                                         @if (SignInManager.IsSignedIn(User))
                                         {

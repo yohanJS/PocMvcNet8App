@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PocMvcNet8App.Data;
 
@@ -11,9 +12,11 @@ using PocMvcNet8App.Data;
 namespace PocMvcNet8App.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231123003416_AddingComment2")]
+    partial class AddingComment2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,9 +254,6 @@ namespace PocMvcNet8App.Data.Migrations
                     b.Property<int?>("BlogModelId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CommentContent")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
 
@@ -270,6 +270,9 @@ namespace PocMvcNet8App.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TitleComment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TitleContent")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
@@ -292,10 +295,13 @@ namespace PocMvcNet8App.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BlogPostId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Content")
+                    b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -303,13 +309,12 @@ namespace PocMvcNet8App.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("CommentModel");
                 });
@@ -425,6 +430,13 @@ namespace PocMvcNet8App.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PocMvcNet8App.Models.CommentModel", b =>
+                {
+                    b.HasOne("PocMvcNet8App.Data.ApplicationUser", null)
+                        .WithMany("commentModel")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("PocMvcNet8App.UserPrimaryInfo", b =>
                 {
                     b.HasOne("PocMvcNet8App.Models.BlogModel", null)
@@ -441,6 +453,8 @@ namespace PocMvcNet8App.Data.Migrations
             modelBuilder.Entity("PocMvcNet8App.Data.ApplicationUser", b =>
                 {
                     b.Navigation("blogPostModel");
+
+                    b.Navigation("commentModel");
 
                     b.Navigation("userPrimaryInfo");
                 });
