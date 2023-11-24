@@ -6,30 +6,38 @@
 
 @{
     ViewData["Title"] = "Index";
+    var latestPost = new BlogPostModel();
+}
+
+@if (Model.Posts != null)
+{
+    latestPost = Model.Posts.Last();
 }
 
 <div class="row">
     @*Featured Blog*@
     <div class="p-4 p-md-5 mb-4 text-white bg-dark">
-        <div class="col-md-6 px-0">
-            <h1 class="display-4 fst-italic">Title of a longer featured blog post</h1>
-            <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
-            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
+        <div class="col-12 px-0">
+            <h1 class="display-4 fst-italic">@latestPost.Title</h1>
+            <p class="lead my-3">@latestPost.Content.Substring(0, 240)<span>.....</span></p>
+            <a href="@Url.Action("Details", new { id = latestPost.Id })" class="btn btn-primary lead">Continue reading</a>
         </div>
     </div>
+
+
     @if (Model.Posts != null)
     {
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 @foreach (var item in Model.Posts)
                 {
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-4 mb-4">
                         <div class="custom-card rounded-3 shadow-lg">
                             <div class="row g-0 pt-3 pb-3">
                                 <div class="col-md-6 text-center align-self-center">
                                     @if (item.ImageData != null && item.ImageType != null)
                                     {
-                                        <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="img-card w-75 rounded-3" alt="Card Image">
+                                        <img src="@_imageService.ConvertByteArrayToFile(item.ImageData, item.ImageType)" class="img-card w-50 rounded-3" alt="Card Image">
                                     }
                                 </div>
                                 <div class="col-md-6">

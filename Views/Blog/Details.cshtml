@@ -8,9 +8,8 @@
     ViewData["Title"] = "Details";
 }
 
-
-<div class="container">
-    <div class="row shadow-sm rounded-2">
+<div class="container-fluid min-vh-100">
+    <div class="row">
         <div class="col-12 bg-dark">
             <div class="row">
                 <div class="col-md-6 align-self-start">
@@ -24,59 +23,63 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 m-0 p-5">          
-            <p class="lead">@Model.Content</p>
-            <p class="text-muted small">@Model.CreatedDate</p>
-            <p>By: @Model.Author</p>
+        <!-- Main Content (Blog Post) -->
+        <div class="col-md-8">
             <div class="row">
-                <div class="col p-2 text-end">
-                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                <div class="col-md-10 m-0 p-5">
+                    <p class="lead">@Model.Content</p>
+                    <p class="text-muted small">@Model.CreatedDate</p>
+                    <p>By: @Model.Author</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Sidebar (Add Comment and Comment Section) -->
+        <div class="col-md-4">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <!-- Form for adding comments -->
+                <div class="row mt-4">
+                    <div class="col-12 shadow-sm rounded-2 mt-3 p-2">
+                        <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
+                            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+
+                            <div class="mb-3 col-5">
+                                <label for="TitleComment" class="form-label">Title</label>
+                                <input type="text" asp-for="TitleComment" class="form-control" />
+                                <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="Comment" class="form-label">Comment</label>
+                                <input type="text" asp-for="Comment" class="form-control" />
+                                <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Comment)</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Add Comment</button>
+                            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                        </form>
+                    </div>
+                </div>
+            }
+
+            <!-- Comment Section -->
+            @if (Model.Comments != null)
+            {
+                @foreach (var comment in Model.Comments)
+                {
+                    <div class="row mt-3">
+                        <div class="col-12 p-0">
+                            <div class="p-3 mb-3">
+                                <p class="mb-1">@comment.TitleComment</p>
+                                <p class="mb-1">@comment.Comment</p>
+                                <p class="mb-1 small text-muted">@comment.Created</p>
+                                <p class="mb-0 fw-bold">Author: @comment.Author</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
-
-    @*Form for adding comments*@
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <div class="row mt-4">
-            <div class="col-12 border border-2 rounded-2 mt-3 p-2">
-                <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
-                    <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
-
-                    <div class="mb-3 col-5">
-                        <label for="TitleComment" class="form-label">Title</label>
-                        <input type="text" asp-for="TitleComment" class="form-control" />
-                        <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="Comment" class="form-label">Comment</label>
-                        <input type="text" asp-for="Comment" class="form-control" />
-                        <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Comment)</div>
-                    </div>
-
-                    <button type="submit" class="btn btn-success">Add Comment</button>
-                </form>
-            </div>
-        </div>
-    }
-
-    @*Comment Section*@
-    @if (Model.Comments != null)
-    {
-        @foreach (var comment in Model.Comments)
-        {
-            <div class="row mt-3 bg-light">
-                <div class="col-12 p-0">
-                    <div class="p-3 mb-3">
-                        <p class="mb-1">@comment.TitleComment</p>
-                        <p class="mb-1">@comment.Comment</p>
-                        <p class="mb-1 small text-muted">@comment.Created</p>
-                        <p class="mb-0 fw-bold">Author: @comment.Author</p>
-                    </div>
-                </div>
-            </div>
-        }
-    }
 </div>
