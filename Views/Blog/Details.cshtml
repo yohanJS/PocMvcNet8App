@@ -37,27 +37,30 @@
     </div>
 
     @*Form for adding comments*@
-    <div class="row mt-4">
-        <div class="col-12 border border-2 rounded-2 mt-3 p-2">
-            <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
-                <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="row mt-4">
+            <div class="col-12 border border-2 rounded-2 mt-3 p-2">
+                <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
+                    <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
 
-                <div class="mb-3 col-5">
-                    <label for="TitleComment" class="form-label">Title</label>
-                    <input type="text" asp-for="TitleComment" class="form-control" />
-                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
-                </div>
+                    <div class="mb-3 col-5">
+                        <label for="TitleComment" class="form-label">Title</label>
+                        <input type="text" asp-for="TitleComment" class="form-control" />
+                        <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
+                    </div>
 
-                <div class="mb-3">
-                    <label for="Comment" class="form-label">Comment</label>
-                    <input type="text" asp-for="Comment" class="form-control" />
-                    <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Comment)</div>
-                </div>
+                    <div class="mb-3">
+                        <label for="Comment" class="form-label">Comment</label>
+                        <input type="text" asp-for="Comment" class="form-control" />
+                        <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Comment)</div>
+                    </div>
 
-                <button type="submit" class="btn btn-success">Add Comment</button>
-            </form>
+                    <button type="submit" class="btn btn-success">Add Comment</button>
+                </form>
+            </div>
         </div>
-    </div>
+    }
 
     @*Comment Section*@
     @if (Model.Comments != null)
