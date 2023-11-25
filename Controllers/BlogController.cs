@@ -52,7 +52,6 @@ namespace PocMvcNet8App.Controllers
         public IActionResult Details(int? id)
         {
             BlogModel? blogModel = new BlogModel();
-            CommentModel? commentModel = new CommentModel();
             BlogPostModel? blogPostModel = new BlogPostModel();
 
             if (id == null)
@@ -76,6 +75,17 @@ namespace PocMvcNet8App.Controllers
             {
                 blogPostModel.Comments = _context.CommentModel
                     .Where(comment => comment.BlogPostId == id).ToList();
+            }
+            if (_context.SubCommentModel != null)
+            {
+
+                CommentModel commentModel = new CommentModel();
+                if (_context.CommentModel != null && _context.CommentModel.Any())
+                {
+                    commentModel = _context.CommentModel.FirstOrDefault(comment => comment.BlogPostId == id);
+                }
+
+                blogPostModel.SubComments = _context.SubCommentModel.ToList();
             }
 
             return View(blogPostModel);

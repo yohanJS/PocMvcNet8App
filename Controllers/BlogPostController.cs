@@ -154,6 +154,38 @@ namespace PocMvcNet8App.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<ActionResult> AddSubComment(int blogPostId, [Bind("Id,CommentId,SubComment")] BlogPostModel blogPostModel)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            SubCommentModel subCommentModel = new SubCommentModel();
+
+            if (currentUser != null)
+            {
+                if (blogPostModel.SubComment != null)
+                {
+                    subCommentModel.UserId = currentUser.Id;
+                    
+                    subCommentModel.Comment = blogPostModel.SubComment;
+                    var commentIdInt = int.Parse(blogPostModel.CommentId);
+                    subCommentModel.CommentId = commentIdInt;
+
+                    subCommentModel.Author = currentUser.Email;
+                }
+
+                //add the new comment to the Comment Table
+                _context.SubCommentModel.Add(subCommentModel);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Details", "Blog", new { id = blogPostId });
+            }
+            else
+            {
+                return NotFound("Current user not found.");
+            }
+        }
+
         // GET: BlogPost/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
