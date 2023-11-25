@@ -9,7 +9,7 @@
     var latestPost = new BlogPostModel();
 }
 
-@if (Model.Posts != null)
+@if (Model.Posts != null && Model.Posts.Any())
 {
     latestPost = Model.Posts.Last();
 }
@@ -19,7 +19,11 @@
     <div class="p-4 p-md-5 mb-4 text-white bg-dark">
         <div class="col-12 px-0">
             <h1 class="display-4 fst-italic">@latestPost.Title</h1>
-            <p class="lead my-3">@latestPost.Content.Substring(0, 240)<span>.....</span></p>
+            @* @if (latestPost.Content != null )
+            {
+                <p class="lead my-3">@latestPost.Content.Substring(0, 240)<span>.....</span></p>
+            } *@
+            <p class="lead my-3">@latestPost.Content</p>
             <a href="@Url.Action("Details", new { id = latestPost.Id })" class="btn btn-primary lead">Continue reading</a>
         </div>
     </div>
@@ -43,26 +47,30 @@
                                 <div class="col-md-6">
                                     <div class="card-body text-center">
                                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Title)</h5>
-                                        @if (item.Content != null && item.Content.Length > 100)
+                                        @* @if (item.Content != null && item.Content.Length > 100)
                                         {
                                             <p class="card-text">@Html.Raw($"{item.Content.Substring(0, 100)}...")</p>
                                         }
                                         else
                                         {
                                             <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
-                                        }
+                                        } *@
+                                        <p class="lead my-3">@Html.DisplayFor(modelItem => item.Content)</p>
                                         <p class="card-text"><small>@item.Author</small></p>
                                         <p class="card-text m-0"><small class="text-muted">@Html.DisplayFor(modelItem => item.CreatedDate.Year)</small></p>
                                         <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-primary">Read</a>
                                         @if (SignInManager.IsSignedIn(User))
                                         {
-                                            @foreach (var user in Model.users)
+                                            @if (Model.users != null)
                                             {
-                                                if (user.UserId == item.UserId)
+                                                @foreach (var user in Model.users)
                                                 {
-                                                    <a asp-controller="BlogPost" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
+                                                    if (user.UserId == item.UserId)
+                                                    {
+                                                        <a asp-controller="BlogPost" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
+                                                    }
                                                 }
-                                            }
+                                            }      
                                         }
                                     </div>
                                 </div>
