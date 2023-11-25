@@ -16,14 +16,21 @@ namespace PocMvcNet8App.Models
         public string? ImageType { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; } = DateTime.Today;
         public string? Author { get; set; }
+        [NotMapped]
+        public string? CommentId { get; set; }
         [NotMapped]
         public string? TitleComment { get; set; }
         [NotMapped]
         public string? Comment { get; set; }
         [NotMapped]
+        public string? SubComment { get; set; }
+        [NotMapped]
         public List<CommentModel>? Comments { get; set; }
+        [NotMapped]
+        public List<SubCommentModel>? SubComments { get; set; }
+
 
         [ForeignKey("UserId")]
         public virtual ApplicationUser? User { get; set; }
