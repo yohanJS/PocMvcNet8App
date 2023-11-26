@@ -7,13 +7,13 @@
 
 @if (!Model.Any())
 {
-    <div class="row mt-4 justify-content-center">
-        <div class="col-12 align-self-center p-0">
+    <div class="row justify-content-center p-3">
+        <div class="col-md-4 align-self-center p-0">
             <div class="card mx-auto profile-card">
                 <div class="card-body p-5">
                     <h5 class="card-title">Ready to get started?</h5>
                     <p class="card-text">Enter your information to create a new profile.</p>
-                    <a asp-action="Create" class="btn btn-lg btn-primary btn-action">Create</a>
+                    <a asp-action="Create" class="btn btn-primary btn-action">Create</a>
                 </div>
             </div>
         </div>
