@@ -75,19 +75,21 @@
                                 <p class="mb-1">@comment.Comment</p>
                                 <p class="mb-1 small text-muted">@comment.Created</p>
                                 <p class="mb-0 fw-bold">Author: @comment.Author</p>
-                                @*Form to reply to comments*@
-                                <div class="col-12">
-                                    <form asp-controller="BlogPost" asp-action="AddSubComment" asp-route-blogPostId="@Model.Id" method="post">
-                                        <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
-                                        <input type="hidden" asp-for="@Model.CommentId" value="@comment.Id" />
-                                        <div class="mb-3">
-                                            <input type="text" asp-for="SubComment" class="form-control" />
-                                        </div>
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    <div class="col-12">
+                                        <form asp-controller="BlogPost" asp-action="AddSubComment" asp-route-blogPostId="@Model.Id" method="post">
+                                            <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
+                                            <input type="hidden" asp-for="@Model.CommentId" value="@comment.Id" />
+                                            <div class="mb-3">
+                                                <input type="text" asp-for="SubComment" class="form-control" />
+                                            </div>
 
-                                        <button type="submit" class="btn btn-success">Reply</button>
-                                    </form>
-                                </div>
-
+                                            <button type="submit" class="btn btn-success">Reply</button>
+                                        </form>
+                                    </div>
+                                }
+                                @*Form to reply to comments*@                                
                                 @if (Model.SubComments != null)
                                 {
                                     @foreach (var subcomment in Model.SubComments)
