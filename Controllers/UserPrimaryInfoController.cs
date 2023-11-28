@@ -80,7 +80,7 @@ namespace PocMvcNet8App.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ImageData,ImageType,ImageFile,JobTitle,Age,FirstName,LastName,Address,ZipCode")] UserPrimaryInfo userPrimaryInfo)
+        public async Task<IActionResult> Create([Bind("Id,UserId,ImageData,ImageType,ImageFile,JobTitle,Age,FirstName,LastName,About")] UserPrimaryInfo userPrimaryInfo)
         {
             UserPrimaryInfo model = new UserPrimaryInfo();
             if (ModelState.IsValid)
@@ -134,7 +134,7 @@ namespace PocMvcNet8App.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ImageData,ImageType,ImageFile,JobTitle,Age,FirstName,LastName,Address,ZipCode")] UserPrimaryInfo userPrimaryInfo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ImageData,ImageType,ImageFile,JobTitle,Age,FirstName,LastName,About")] UserPrimaryInfo userPrimaryInfo)
         {
             if (id != userPrimaryInfo.Id)
             {
@@ -168,8 +168,7 @@ namespace PocMvcNet8App.Controllers
                                 userPrimaryInfoToUpdate.Age = userPrimaryInfo.Age;
                                 userPrimaryInfoToUpdate.FirstName = userPrimaryInfo.FirstName;
                                 userPrimaryInfoToUpdate.LastName = userPrimaryInfo.LastName;
-                                userPrimaryInfoToUpdate.Address = userPrimaryInfo.Address;
-                                userPrimaryInfoToUpdate.ZipCode = userPrimaryInfo.ZipCode;
+                                userPrimaryInfoToUpdate.About = userPrimaryInfo.About;
 
                                 _context.Update(userPrimaryInfoToUpdate);
                                 await _context.SaveChangesAsync();

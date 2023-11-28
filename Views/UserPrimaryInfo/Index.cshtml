@@ -43,11 +43,18 @@ else
                 <div class="col-md-6">
                     @*About me Section*@
                     <h1 class="display-6 mb-3 mt-2 fw-bold">This is a nice title</h1>
-                    <p class="lead">
-                        Greetings! I'm a curious and creative individual with a deep passion for exploring the ever-expanding universe of ideas. 
-                        My journey through life has woven a tapestry of diverse experiences, shaping my perspective and nurturing a love for 
-                        continuous learning. 
-                    </p>
+                    @if (user.About == null)
+                    {
+                        <p class="lead">
+                            Greetings! I'm a curious and creative individual with a deep passion for exploring the ever-expanding universe of ideas.
+                            My journey through life has woven a tapestry of diverse experiences, shaping my perspective and nurturing a love for
+                            continuous learning.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="lead">@user.About</p>
+                    }
                     <p>Author: @user.FirstName @user.LastName</p>
                     <p>@DateTime.Now.ToShortDateString()</p>
                     <div class="col-12 text-md-start text-end">
