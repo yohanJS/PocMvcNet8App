@@ -9,12 +9,16 @@ namespace PocMvcNet8App.Models
         public int Id { get; set; }
         public string? UserId { get; set; }
         [NotMapped]
-        [Display(Name = "Image")]
         [DataType(DataType.Upload)]
         public IFormFile? ImageFile { get; set; }
         public byte[]? ImageData { get; set; }
         public string? ImageType { get; set; }
+        [Required]
+        [StringLength(20)]
         public string? Title { get; set; }
+        [Required]
+        [StringLength(2000)]
+        [DataType(DataType.MultilineText)]
         public string? Content { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Today;
         public string? Author { get; set; }
