@@ -7,7 +7,7 @@
         public int? CommentId { get; set; }
         public string? Comment { get; set; }
         public string? Author { get; set; }
-        public DateTime Created { get; set; } = DateTime.Today;
+        public DateTime Created { get; set; } = DateTime.Now;
 
     }
 }

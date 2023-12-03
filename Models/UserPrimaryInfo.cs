@@ -19,7 +19,7 @@ namespace PocMvcNet8App
         public string? ImageType { get; set; }
         [Required]
         [Display(Name = "Profession")]
-        [StringLength(20)]
+        [StringLength(50)]
         public string? JobTitle { get; set; }
         public int Age { get; set; }
         [Required]

@@ -6,28 +6,38 @@
 
 @{
     ViewData["Title"] = "Index";
-    var latestPost = new BlogPostModel();
-}
+    BlogPostModel latestPost = new BlogPostModel();
 
-@if (Model.Posts != null && Model.Posts.Any())
-{
-    latestPost = Model.Posts.Last();
+    if (Model.Posts != null && Model.Posts.Any())
+    {
+        latestPost = Model.Posts.Last();
+    }
 }
 
 <div class="row">
-    @*Featured Blog*@
-    <div class="p-4 p-md-5 mb-4 text-white bg-dark">
-        <div class="col-12 px-0">
-            <h1 class="display-4 fst-italic">@latestPost.Title</h1>
-            <a href="@Url.Action("Details", new { id = latestPost.Id })" class="btn btn-primary lead">Continue reading</a>
+    @if (latestPost != null)
+    {
+        @*Featured Blog*@
+        <div class="p-4 p-md-5 mb-4 text-white bg-dark">
+            <div class="col-12 px-0">
+                @if (latestPost.Content != null)
+                {
+                    <h1 class="display-4 fst-italic">@latestPost.Title</h1>
+                    <a href="@Url.Action("Details", new { id = latestPost.Id })" class="btn btn-primary lead">Continue reading</a>
+                }
+                else
+                {
+                    <h1 class="display-4 fst-italic">"Hey there! Currently, no blogs are live on our platform, but stay tuned for upcoming content!"</h1>
+                }
+            </div>
         </div>
-    </div>
-
+    }
 
     @if (Model.Posts != null)
     {
         <div class="container">
             <div class="row">
+
                 @foreach (var item in Model.Posts)
                 {
                     <div class="col-md-4 mb-4">
@@ -56,7 +66,7 @@
                                                         <a asp-controller="BlogPost" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger">Edit</a>
                                                     }
                                                 }
-                                            }      
+                                            }
                                         }
                                     </div>
                                 </div>

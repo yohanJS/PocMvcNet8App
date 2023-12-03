@@ -32,6 +32,10 @@ namespace PocMvcNet8App.Controllers
             {
                 model.Posts = _context.blogPostModel.ToList();
             }
+            if (_context.CommentModel != null) 
+            {
+                model.comments = _context.CommentModel.ToList();
+            }
 
             if (currentUser != null && _context.UserPrimaryInfo != null)
             {
