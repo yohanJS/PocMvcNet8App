@@ -53,7 +53,7 @@
             </div>
         </nav>
     </header>
-    <div class="container-fluid p-0 min-vh-100 bg-light">
+    <div class="container-fluid pt-5 p-0 min-vh-100 bg-light">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -61,7 +61,8 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - PocMvcNet8App - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Blog" asp-action="Index"><img src="~/logo/logoSVG.svg" /></a>
+            &copy; 2023 - Colony Reviews @* - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

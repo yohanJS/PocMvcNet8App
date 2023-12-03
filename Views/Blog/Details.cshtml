@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <!-- Main Content (Blog Post) -->
+        @*Main Content (Blog Post)*@
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-10 m-0 p-5">
@@ -33,26 +33,27 @@
                 </div>
             </div>
         </div>
-
-        <!-- Sidebar (Add Comment and Comment Section) -->
+        @*Sidebar (Add Comment and Comment Section)*@
         <div class="col-md-4">
             @if (SignInManager.IsSignedIn(User))
             {
-                <!-- Form for adding comments -->
+                @*Form for adding comments*@
                 <div class="row mt-4">
-                    <div class="col-12 shadow-sm rounded-2 mt-3 p-2">
+                    <h3>Comment</h3>
+                    <div class="col-12 shadow-sm mt-3 p-2 bg-white rounded-2">
                         <form asp-controller="BlogPost" asp-action="AddComment" asp-route-blogPostId="@Model.Id" method="post">
                             <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
 
                             <div class="mb-3 col-5">
-                                <label for="TitleComment" class="form-label">Title</label>
+                                <label asp-for="Title" class="control-label"></label>
                                 <input type="text" asp-for="TitleComment" class="form-control" />
                                 <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.TitleComment)</div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="Comment" class="form-label">Comment</label>
-                                <input type="text" asp-for="Comment" class="form-control" />
+                                <label asp-for="Comment" class="control-label"></label>
+                                <textarea asp-for="Comment" class="form-control" rows="5"></textarea>
+                                <span asp-validation-for="Comment" class="text-danger"></span>
                                 <div class="invalid-feedback">@Html.ValidationMessageFor(model => model.Comment)</div>
                             </div>
 
@@ -63,7 +64,7 @@
                 </div>
             }
 
-            <!-- Comment Section -->
+            @*Comment Section*@
             @if (Model.Comments != null)
             {
                 @foreach (var comment in Model.Comments)
@@ -73,11 +74,34 @@
                             <div class="p-3 mb-3">
                                 <p class="mb-1">@comment.TitleComment</p>
                                 <p class="mb-1">@comment.Comment</p>
-                                <p class="mb-1 small text-muted">@comment.Created</p>
-                                <p class="mb-0 fw-bold">Author: @comment.Author</p>
+                                <p class="mb-0 fw-bold">Author: <span class="text-success">@comment.Author</span></p>
+                                <p class="mb-1 small text-muted">@comment.Created.ToShortDateString()</p>                              
+                                @if (Model.SubComments != null)
+                                {
+                                    @*SubComments Section*@
+                                    @foreach (var subcomment in Model.SubComments)
+                                    {
+                                        if (subcomment.CommentId == comment.Id)
+                                        {
+                                            <div class="row m-2">
+                                                <div class="col-12 p-0 text-start">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-return-right" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5" />
+                                                    </svg>
+                                                </div>
+                                                <div class="col-12 rounded-2 bg-light text-dark">
+                                                    <p class="">@subcomment.Comment</p>
+                                                    <p class="mb-0 fw-bold">Author: <span class="text-success">@subcomment.Author</span></p>
+                                                    <p class="mb-1 small text-muted">@subcomment.Created.ToShortDateString()</p>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                }
                                 @if (SignInManager.IsSignedIn(User))
                                 {
-                                    <div class="col-12">
+                                    @*Form to reply to comments*@
+                                    <div class="col-12 mt-5">
                                         <form asp-controller="BlogPost" asp-action="AddSubComment" asp-route-blogPostId="@Model.Id" method="post">
                                             <input type="hidden" asp-for="@Model.Id" value="@Model.Id" />
                                             <input type="hidden" asp-for="@Model.CommentId" value="@comment.Id" />
@@ -88,28 +112,6 @@
                                             <button type="submit" class="btn btn-success">Reply</button>
                                         </form>
                                     </div>
-                                }
-                                @*Form to reply to comments*@                                
-                                @if (Model.SubComments != null)
-                                {
-                                    @foreach (var subcomment in Model.SubComments)
-                                    {
-                                        if (subcomment.CommentId == comment.Id)
-                                        {
-                                            <div class="row">
-                                                <div class="col-12 text-start">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-return-right" viewBox="0 0 16 16">
-                                                        <path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5" />
-                                                    </svg>
-                                                </div>
-                                                <div class="col-12 rounded-2 bg-warning text-dark">
-                                                    <p>@subcomment.Comment</p>
-                                                    <p>@subcomment.Author</p>
-                                                    <p>@subcomment.Created</p>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
                                 }
                             </div>
                         </div>

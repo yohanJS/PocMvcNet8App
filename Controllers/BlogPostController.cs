@@ -94,7 +94,6 @@ namespace PocMvcNet8App.Controllers
 
                     if (_context.UserPrimaryInfo != null)
                     {
-                        // Ensure that the user is editing their own record
                         var userPrimaryInfo = await _context.UserPrimaryInfo
                             .FirstOrDefaultAsync(u => u.UserId == currentUser.Id);
                         blogPostModel.Author = userPrimaryInfo.FirstName;

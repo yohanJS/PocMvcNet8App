@@ -14,7 +14,7 @@ namespace PocMvcNet8App.Models
         public byte[]? ImageData { get; set; }
         public string? ImageType { get; set; }
         [Required]
-        [StringLength(20)]
+        [StringLength(50)]
         public string? Title { get; set; }
         [Required]
         [StringLength(2000)]
