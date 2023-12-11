@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using PocMvcNet8App.Data;
 using PocMvcNet8App.Models;
 
@@ -25,21 +29,19 @@ namespace PocMvcNet8App.Controllers
         // GET: Blog
         public async Task<IActionResult> Index()
         {
-            BlogModel model = new BlogModel();
+            BlogModel? model = new BlogModel();
+
+            // If not in cache, fetch data from the database
+            model = new BlogModel();
             var currentUser = await _userManager.GetUserAsync(User);
 
             if (_context.blogPostModel != null)
             {
-                model.Posts = _context.blogPostModel.ToList();
-            }
-            if (_context.CommentModel != null) 
-            {
-                model.comments = _context.CommentModel.ToList();
+                model.Posts = await _context.blogPostModel.FromSqlRaw("spblogPostModel_GetAllBlogs").ToListAsync();
             }
 
             if (currentUser != null && _context.UserPrimaryInfo != null)
             {
-                // Filter UserPrimaryInfo records by the current user's ID
                 var user = await _context.UserPrimaryInfo
                     .Include(u => u.User)
                     .Where(u => u.UserId == currentUser.Id)
@@ -49,7 +51,6 @@ namespace PocMvcNet8App.Controllers
             }
 
             return View(model);
-
         }
 
         // GET: Blog/Details/ofId
@@ -75,7 +76,7 @@ namespace PocMvcNet8App.Controllers
             {
                 blogPostModel = blogModel.Posts.FirstOrDefault();
             }
-            if (_context.CommentModel != null)
+            if (_context.CommentModel != null && blogPostModel != null)
             {
                 blogPostModel.Comments = _context.CommentModel
                     .Where(comment => comment.BlogPostId == id).ToList();
